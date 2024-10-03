@@ -1,0 +1,36 @@
+.p-toast.p-toast-top-right {
+    z-index: 1000;
+    top: 7rem;
+}
+
+
+.p-datatable-header {
+    text-align: center !important; // or center
+    display: block !important;
+
+}
+.p-datatable.p-datatable-gridlines.p-datatable-scrollable .p-datatable-tbody > tr + tr > td, .p-datatable.p-datatable-gridlines.p-datatable-scrollable .p-datatable-tbody > tr:first-child > td {
+    padding: 0.3rem 0.5rem !important;
+    height: 20px;
+}
+.p-datatable .p-datatable-tbody > tr > td {
+    padding: 0.3rem 0.5rem !important;
+    height: 20px;
+}
+.card {
+    padding: 0.8rem !important;
+}
+
+.layout-sidebar{
+    padding: 0.5rem !important;
+}
+
+.p-inputtext {
+    &.p-required {
+        background: rgba(255, 255, 0, 0.5);
+    }
+}
+
+:root {
+    font-size: 12px;
+}

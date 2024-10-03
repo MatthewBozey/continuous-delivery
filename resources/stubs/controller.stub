@@ -1,0 +1,33 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\{{studlyModelName}}\{{studlyModelName}}CreateRequest;
+use App\Http\Requests\{{studlyModelName}}\{{studlyModelName}}UpdateRequest;
+use App\Http\Responses\ApiSuccessResponse;
+use App\Models\{{studlyModelName}};
+
+class {{studlyModelName}}Controller extends BaseCrudController {
+
+    /**
+     * @param  {{studlyModelName}}CreateRequest  $request
+     * @return ApiSuccessResponse
+     */
+    public function store({{studlyModelName}}CreateRequest $request): ApiSuccessResponse
+    {
+        return parent::store($request);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  {{studlyModelName}}UpdateRequest  $request
+     * @param  int  $id
+     * @return ApiSuccessResponse
+     */
+    public function update({{studlyModelName}}UpdateRequest $request, int $id): ApiSuccessResponse
+    {
+        return parent::update($request, $id);
+    }
+
+}

@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Http\Requests\{{studlyModelName}};
+
+use App\Http\Requests\BaseFormUpdateRequest;
+
+class {{studlyModelName}}UpdateRequest extends BaseFormUpdateRequest
+{
+    /** @return bool */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /** @return array */
+    public function rules(): array
+    {
+        return [];
+    }
+
+    public function attributes(): array
+    {
+        return [];
+    }
+
+}

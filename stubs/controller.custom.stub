@@ -1,0 +1,67 @@
+<?php
+
+namespace {{ namespace }};
+
+use App\Http\Requests\{{ storeRequest }};
+use App\Http\Requests\{{ updateRequest }};
+use App\Models\{{ model }};
+use App\Http\Controllers\Controller;
+use App\Http\Responses\ApiSuccessResponse;
+use Illuminate\Http\Request;
+
+class {{ class }} extends Controller
+{
+    public function __construct()
+    {
+        $this->middleware('permission:{{ permissionPrefix }} list', ['only' => ['index']]);
+        $this->middleware('permission:{{ permissionPrefix }} show', ['only' => ['show']]);
+        $this->middleware('permission:{{ permissionPrefix }} create', ['only' => ['store']]);
+        $this->middleware('permission:{{ permissionPrefix }} edit', ['only' => ['update']]);
+        $this->middleware('permission:{{ permissionPrefix }} delete', ['only' => ['destroy']]);
+    }
+
+    public function index(Request $request): ApiSuccessResponse
+    {
+        return new ApiSuccessResponse({{ model }}::orderBy('{{ orderBy }}')->get());
+    }
+
+    /**
+     * @throws \Throwable
+     */
+    public function store({{ storeRequest }} $request): ApiSuccessResponse
+    {
+        ${{ modelVariable }} = new {{ model }}($request->validated());
+        ${{ modelVariable }}->saveOrFail();
+
+        return new ApiSuccessResponse(${{ modelVariable }});
+    }
+
+    public function show(Request $request, int $id): ApiSuccessResponse
+    {
+        return new ApiSuccessResponse({{ model }}::find($id));
+    }
+
+    /**
+     * @param {{ updateRequest }} $request
+     * @param int $id
+     * @return ApiSuccessResponse
+     */
+    public function update({{ updateRequest }} $request, int $id): ApiSuccessResponse
+    {
+        ${{ modelVariable }} = {{ model }}::findOrFail($id);
+        ${{ modelVariable }}->update($request->validated());
+        return new ApiSuccessResponse(${{ modelVariable }});
+    }
+
+    /**
+     * @param Request $request
+     * @param int $id
+     * @return ApiSuccessResponse
+     */
+    public function destroy(Request $request, int $id): ApiSuccessResponse
+    {
+        ${{ modelVariable }} = {{ model }}::findOrFail($id);
+        return new ApiSuccessResponse(${{ modelVariable }}->delete());
+    }
+}
+

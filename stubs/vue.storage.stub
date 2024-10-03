@@ -1,0 +1,37 @@
+export default {
+    state: {
+        {{ model }}: [],
+    },
+    getters: {
+        {{ model }}: s => s.{{ model }},
+    },
+    mutations: {
+        save{{ model_camel }}(state, {{ model }}) {
+            state.{{ model }} = {{ model }};
+        }
+    },
+    actions: {
+        append{{ model_camel }}({ commit, state }, data) {
+            const states = state.{{ model }};
+            const index = states.findIndex(s => s.{{ primary }} === data.{{ primary }});
+            if (index !== -1) {
+                states[index] = data;
+                commit('save{{ model_camel }}', states);
+            } else {
+                states.push(data);
+            }
+        },
+
+        delete{{ model_camel }}({ commit, state }, data) {
+            const states = state.{{ model }};
+            const index = states.findIndex(s => s.{{ primary }} === data.{{ primary }});
+            if (index !== -1) {
+                states.splice(index, 1);
+                commit('save{{ model_camel }}', states);
+            }
+        }
+
+    },
+    modules: {}
+}
+

@@ -1,0 +1,49 @@
+version: '3'
+services:
+
+    #PHP Service
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: php:7.3-fpm
+        container_name: app
+        restart: always
+        tty: true
+        environment:
+            APP_KEY: base64:7DJJqk7z+GGfSXt9UFVnw5agyek1GTxZpwfIBnEbDmM=
+            SERVICE_NAME: app
+            SERVICE_TAGS: dev
+            DB_CONNECTION: sqlsrv
+            DB_HOST: 192.168.2.116
+            DB_PORT: 1433
+            DB_DATABASE: KRON_CI_COPY
+            DB_USERNAME: MatveevEV
+            DB_PASSWORD: "Mat0703#"
+        working_dir: /var/www
+        volumes:
+            - ./src:/var/www
+            -  /var/www/vendor
+            - ./php/php.ini:/usr/local/etc/php/conf.d/local.ini
+        networks:
+            - app-network
+
+    #Nginx Service
+    webserver:
+        image: nginx:alpine
+        container_name: webserver
+        restart: unless-stopped
+        tty: true
+        ports:
+            - "11104:80"
+            - "8443:443"
+        volumes:
+            - ./:/var/www
+            - ./nginx/conf.d/:/etc/nginx/conf.d/
+        networks:
+            - app-network
+
+#Docker Networks
+networks:
+    app-network:
+        driver: bridge

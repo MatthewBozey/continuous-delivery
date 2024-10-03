@@ -1,0 +1,48 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\PermissionSection;
+use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Permission;
+
+class {{ model }}Seeder extends Seeder
+{
+
+    /**
+     * @return void
+     */
+    public function run(): void
+    {
+        $permissionSection = PermissionSection::updateOrCreate(['title' => '{{ section_title }}',
+            'sysname' => '{{ section_sysname }}'
+        ]);
+        $permissionSection->save();
+
+        Permission::updateOrCreate(['name' => '{{ permission }} list',
+            'title' => 'Получение списка {{ model_title }}',
+            'guard_name' => 'web',
+            'permission_section_id' => $permissionSection->permission_section_id
+        ]);
+        Permission::updateOrCreate(['name' => '{{ permission }} show',
+            'title' => 'Получение {{ model_title }}',
+            'guard_name' => 'web',
+            'permission_section_id' => $permissionSection->permission_section_id
+        ]);
+        Permission::updateOrCreate(['name' => '{{ permission }} create',
+            'title' => 'Создание {{ model_title }}',
+            'guard_name' => 'web',
+            'permission_section_id' => $permissionSection->permission_section_id
+        ]);
+        Permission::updateOrCreate(['name' => '{{ permission }} edit',
+            'title' => 'Редактирование {{ model_title }}',
+            'guard_name' => 'web',
+            'permission_section_id' => $permissionSection->permission_section_id
+        ]);
+        Permission::updateOrCreate(['name' => '{{ permission }} delete',
+            'title' => 'Удаление {{ model_title }}',
+            'guard_name' => 'web',
+            'permission_section_id' => $permissionSection->permission_section_id
+        ]);
+    }
+}

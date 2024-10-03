@@ -1,0 +1,206 @@
+<template>
+    <div class="card">
+        <div class="grid">
+            <div class="col">
+                <DataTable ref="dt" :value="{{ model }}s" v-model:selection="selectedData"
+                           selection-mode="single" :metaKeySelection="false" @row-select="selectTableRow"
+                           @row-unselect="unselectTableRow"
+                           responsiveLayout="stack" :select-all="false" :loading="loading">
+                    <template #header>
+                        <Toolbar>
+                            <template #start>
+                                <Button class="p-button-success p-button-outlined p-button-sm" label="Создать"
+                                        icon="pi pi-plus" @click="createButtonHandle"
+                                        :disabled="disabledCreateButton"
+                                        v-if="this.check_permission('{{ permissionName }} create')"/>
+                            </template>
+                        </Toolbar>
+                    </template>
+
+                    <Column header="ID" field="{{ primary }}" body-class="text-center"/>
+
+                </DataTable>
+            </div>
+            <div class="col card" v-show="showEditRow">
+                <div class="field grid">
+                    <label for="{{ primary }}" class="col-fixed"></label>
+                    <div class="col">
+                        <InputText type="text" v-model="selectedData.{{ primary }}" disabled id="{{ primary }}"/>
+                    </div>
+                </div>
+
+                <div class="field grid gap-3 ">
+                    <Button class="p-button-success p-button-outlined w-full col" @click='clickRow'
+                            label="Сохранить" icon="pi pi-plus" v-if="this.check_permission('{{ permissionName }} edit')"/>
+                    <Button class="p-button-danger p-button-outlined w-full col" @click='clickTrashRow'
+                            label="Удалить" icon="pi pi-trash" v-if="this.check_permission('{{ permissionName }} delete')"/>
+                    <Button class="p-button-secondary p-button-outlined w-full col" @click='clickCancelRow'
+                            label="Отменить" icon="pi pi-times"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+    name: "{{ model }}",
+
+    data() {
+        return {
+            loading: false,
+            selectedData: {
+                {{ primary }}
+            },
+            showEditRow: false,
+            disabledCreateButton: false,
+        }
+    },
+
+    mounted() {
+        this.loading = true;
+        Echo.private(`{{ model_camel }}`)
+            .listen('.{{ model_camel }}Updated', (e) => {
+                if (e.model.{{ primary }} === this.selectedData.{{ primary }}) {
+                    this.selectedData = e.model;
+                    this.$notification.warning('Выбранные данные были обновлены');
+                }
+                this.$store.dispatch('append{{ model }}', e.model);
+            })
+            .listen('.{{ model_camel }}Deleted', (e) => {
+                this.$store.dispatch('delete{{ model_camel }}', e.model);
+            })
+            .listen('.{{ model_camel }}Created', (e) => {
+                this.$store.dispatch('append{{ model_camel }}', e.model);
+            });
+        this.$devops_api.get('/api/{{ apiName }}')
+            .then(value => this.$store.commit('save{{ model_camel }}', value.data.data))
+            .catch(reason => this.$store.dispatch('showError', reason))
+            .finally(() => this.loading = false);
+        if (this.$route.query.method === 'create') {
+            this.showEditRow = true;
+        } else if (this.$route.query.method === 'update' && this.$route?.query?.{{ primary }}/ !== null) {
+            this.loading = true;
+            this.$devops_api
+                .get(`/api/{{ apiName }}/${this.$route.query.{{ primary }}}`)
+                .then(value => this.selectedData = value.data.data)
+                .catch(reason => this.$store.dispatch('showError', reason))
+                .finally(() => this.loading = false);
+            this.showEditRow = true;
+        }
+    },
+
+    computed: {
+        {{ model }}s() {
+            return this.$store.getters.{{ model }};
+        },
+    },
+
+    methods: {
+        selectTableRow(element) {
+            if (this.check_permission('{{ permissionName }} show')) {
+                this.resetSelected()
+                this.showEditRow = true;
+                this.disabledCreateButton = true;
+                this.selectedData = element.data;
+                this.$router.push({
+                    path: this.$route.fullPath,
+                    query: {method: "update", {{ primary }}: this.selectedData.{{ primary }} }
+                });
+            }
+        },
+
+        unselectTableRow() {
+            this.$router.push({path: this.$route.fullPath, query: null});
+            this.showEditRow = false;
+            this.disabledCreateButton = false;
+            this.selectedData = {
+            };
+        },
+
+        clickRow(event) {
+            this.$confirm.require({
+                target: event.currentTarget,
+                message: `Подтвердите`,
+                header: 'Подтверждение',
+                accept: () => {
+                    if (this.$route.query.method === 'create') {
+                        this.$devops_api
+                            .post('/api/{{ apiName }}', this.selectedData)
+                            .catch(reason => this.$store.dispatch('showError', reason))
+                            .then((value) => {
+                                this.showEditRow = false;
+                                this.disabledCreateButton = false;
+                                this.$store.dispatch('append{{ model_camel }}', value.data.data);
+                                this.resetSelected();
+                                this.$notification.success('Добавлено');
+                            })
+                            .finally(() => this.resetSelected());
+                    } else if (this.$route.query.method === 'update' && this.selectedData.{{ primary }} !== null) {
+                        this.$devops_api
+                            .put(`/api/{{ apiName }}/${this.selectedData.{{ primary }}}`, this.selectedData)
+                            .catch(reason => this.$store.dispatch('showError', reason))
+                            .then((value) => {
+                                this.showEditRow = false;
+                                this.disabledCreateButton = false;
+                                this.$store.dispatch('append{{ model_camel }}', value.data.data);
+                                this.resetSelected();
+                                this.$notification.success('Отредактировано');
+                        });
+                    }
+                },
+            });
+        },
+
+        resetSelected() {
+            this.$router.push({path: this.$route.fullPath, query: null});
+            this.selectedData = {
+            };
+        },
+
+        createButtonHandler() {
+            this.disabledCreateButton = true;
+            this.showEditRow = true;
+            this.resetSelected();
+            this.$router.push({path: this.$route.fullPath, query: {method: "create"}});
+        },
+
+        clickCancelRow(event) {
+            this.$confirm.require({
+                target: event.currentTarget,
+                message: `Подтвердите`,
+                header: 'Подтверждение',
+                accept: () => {
+                    this.showEditRow = false;
+                    this.resetSelected();
+                    this.disabledCreateButton = false;
+                    this.$router.push({path: this.$route.fullPath, query: null});
+                },
+            });
+        },
+
+        clickTrashRow(event) {
+            this.$confirm.require({
+                target: event.currentTarget,
+                message: `Подтвердите удаление`,
+                header: 'Подтверждение',
+                accept: () => {
+                    /*
+                    this.$devops_api.delete(`/api/{{ apiName }}/${this.selectedData.{{ primary }}}`).then(() => {
+                        this.$store.dispatch('delete{{ model_camel }}', this.selectedData);
+                        this.showEditRow = false;
+                        this.disabledCreateButton = false;
+                        this.resetSelected();
+                        this.$notification.success('Удалено');
+                    */
+                    }).catch(reason => this.$store.dispatch('showError', reason));
+                },
+            });
+        },
+    }
+}
+</script>
+
+<style scoped>
+
+</style>

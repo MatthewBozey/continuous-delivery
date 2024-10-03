@@ -1,0 +1,38 @@
+<?php
+
+namespace {{ namespace }};
+
+use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Database\Eloquent\Model;
+use App\Filters\QueryFilter;
+use Illuminate\Database\Eloquent\Builder;
+
+class {{ class }} extends Model
+{
+
+    use BroadcastsEvents;
+
+    protected $table = '{{ table }}';
+
+    protected $primaryKey = '{{ primary }}';
+
+    /**
+     * @param Builder $builder
+     * @param QueryFilter $filters
+     * @return Builder
+     */
+    public function scopeFilter(Builder $builder, QueryFilter $filters): Builder
+    {
+        return $filters->apply($builder);
+    }
+
+
+    /**
+     * @return PrivateChannel[]
+     */
+    public function broadcastOn($event): array
+    {
+        return [new PrivateChannel('{{ model }}')];
+    }
+
+}

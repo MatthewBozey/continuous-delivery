@@ -1,0 +1,50 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ rootNamespace }}Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Http\Responses\ApiSuccessResponse;
+
+class {{ class }} extends Controller
+{
+    /**
+     *
+     */
+    public function index(): ApiSuccessResponse
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request): ApiSuccessResponse
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id): ApiSuccessResponse
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id): ApiSuccessResponse
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id): ApiSuccessResponse
+    {
+        //
+    }
+}

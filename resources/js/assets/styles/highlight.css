@@ -1,0 +1,86 @@
+pre code.hljs {
+    display: block;
+    overflow-x: auto;
+    padding: 1em
+}
+
+code.hljs {
+    padding: 3px 5px;
+    color: var(--text-color)
+}
+
+/*!
+  Theme: GitHub Dark
+  Description: Dark theme as seen on github.com
+  Author: github.com
+  Maintainer: @Hirse
+  Updated: 2021-05-15
+
+  Outdated base version: https://github.com/primer/github-syntax-dark
+  Current colors taken from GitHub's CSS
+*/
+.hljs {
+    color: var(--text-color);
+    background: var(--primary-color)
+}
+
+.hljs-doctag, .hljs-keyword, .hljs-meta .hljs-keyword, .hljs-template-tag, .hljs-template-variable, .hljs-type, .hljs-variable.language_ {
+    color: var(--pink-300)
+}
+
+.hljs-title, .hljs-title.class_, .hljs-title.class_.inherited__, .hljs-title.function_ {
+    color: var(--purple-300)
+}
+
+.hljs-attr, .hljs-attribute, .hljs-literal, .hljs-meta, .hljs-number, .hljs-operator, .hljs-selector-attr, .hljs-selector-class, .hljs-selector-id, .hljs-variable {
+    color: var(--blue-200)
+}
+
+.hljs-meta .hljs-string, .hljs-regexp, .hljs-string {
+    color: var(--blue-100)
+}
+
+.hljs-built_in, .hljs-symbol {
+    color: var(--orange-400)
+}
+
+.hljs-code, .hljs-comment, .hljs-formula {
+    color: var(--gray-400)
+}
+
+.hljs-name, .hljs-quote, .hljs-selector-pseudo, .hljs-selector-tag {
+    color: var(--green-300)
+}
+
+.hljs-subst {
+    color: var(--surface-50)
+}
+
+.hljs-section {
+    color: var(--blue-700);
+    font-weight: 700
+}
+
+.hljs-bullet {
+    color: var(--yellow-400)
+}
+
+.hljs-emphasis {
+    color: var(--surface-100);
+    font-style: italic
+}
+
+.hljs-strong {
+    color: var(--gray-50);
+    font-weight: 700
+}
+
+.hljs-addition {
+    color: var(--green-200);
+    background-color: var(--green-900)
+}
+
+.hljs-deletion {
+    color: var(--pink-100);
+    background-color: var(--red-900)
+}

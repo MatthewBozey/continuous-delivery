@@ -1,0 +1,140 @@
+stages:
+  - setup
+  - dependencies
+  - test
+  - build
+  - deploy
+
+setup_composer:
+  only:
+    - main
+    - dev
+  stage: setup
+  tags:
+    - cd-tag
+  script:
+    - composer install --prefer-dist --ignore-platform-req=ext-bcmath
+  artifacts:
+    paths:
+      - vendor/
+
+setup_npm:
+  only:
+    - main
+    - dev
+  stage: setup
+  tags:
+    - cd-tag
+  script:
+    - rm -rf node_modules
+    - rm package-lock.json
+    - npm cache clean --force
+    - npm install --force
+  artifacts:
+    paths:
+      - node_modules/
+
+
+test:
+  stage: test
+  tags:
+    - cd-tag
+  needs:
+    - setup_composer
+    - setup_npm
+  only:
+    - main
+  script:
+    - echo "$ENV_FILE" > $CI_PROJECT_DIR/.env
+    - php artisan config:clear
+    - php artisan config:cache
+    - echo "Запуск тестов"
+    - php artisan test
+  artifacts:
+    paths:
+      - .env
+      - vendor/
+      - node_modules/
+
+# Стадия сборки
+build_dev:
+  stage: build
+  tags:
+    - cd-tag
+  only:
+    - dev
+  needs:
+    - setup_composer
+    - setup_npm
+  script:
+    - npm run production
+  artifacts:
+    paths:
+      - build/
+      - vendor/
+      - node_modules/
+
+build:
+  stage: build
+  tags:
+    - cd-tag
+  only:
+    - main
+  needs:
+    - test
+  script:
+    - npm run production
+  artifacts:
+    paths:
+      - build/
+      - vendor/
+      - node_modules/
+
+deploy:
+  stage: deploy
+  needs:
+    - build
+  only:
+    - main
+  tags:
+    - cd-tag
+  script:
+    - whoami
+    - rm -f $CI_PROJECT_DIR/.env
+    - rsync -av --exclude='.env' --exclude='node_modules' --exclude='vendor' --exclude='boostrap/cache' --exclude='storage' $CI_PROJECT_DIR/ /var/www/cicd/
+    - cd /var/www/cicd
+    - composer install --no-interaction --no-progress --prefer-dist
+    - rm -rf node_modules
+    - rm package-lock.json
+    - npm cache clean --force
+    - npm install --force
+    - npm run prod
+    - php artisan migrate --force
+    - php artisan cache:clear
+    - php artisan route:cache
+    - php artisan config:cache
+
+
+deploy test:
+  stage: deploy
+  needs:
+    - build_dev
+  only:
+    - dev
+  tags:
+    - cd-tag
+  script:
+    - whoami
+    - rm -f $CI_PROJECT_DIR/.env
+    - rsync -av --exclude='.env' --exclude='node_modules' --exclude='vendor' --exclude='boostrap/cache' --exclude='storage' $CI_PROJECT_DIR/ /var/www/cicd-test/
+    - cd /var/www/cicd-test
+    - composer install --no-interaction --no-progress --prefer-dist
+    - rm -rf node_modules
+    - rm package-lock.json
+    - npm cache clean --force
+    - npm install --force
+    - npm run prod
+    - php artisan migrate --force
+    - php artisan cache:clear
+    - php artisan route:cache
+    - php artisan config:cache
