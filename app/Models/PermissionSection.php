@@ -17,7 +17,6 @@ use Spatie\Permission\Models\Permission;
  * @method static \Illuminate\Database\Eloquent\Builder|PermissionSection newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PermissionSection query()
  *
- *
  * @property string $title
  * @property string $sysname
  * @property \Illuminate\Support\Carbon|null $created_at

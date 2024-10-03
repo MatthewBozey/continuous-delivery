@@ -36,7 +36,6 @@ class UserPasswordResetNotification extends Notification
             $channels[] = 'telegram';
         }
 
-
         return $channels;
     }
 

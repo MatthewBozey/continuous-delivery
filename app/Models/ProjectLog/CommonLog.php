@@ -19,9 +19,6 @@ class CommonLog extends Model
 
     protected $fillable = ['log_level_id', 'project_log_id', 'project_log_stage_id', 'common_log_date', 'common_log_tag', 'common_log_message'];
 
-    /**
-     * @return CommonLog|Builder
-     */
     public function prunable(): CommonLog|Builder
     {
         return static::where('common_log_date', '<', Carbon::today()->subDays(7));
@@ -33,6 +30,4 @@ class CommonLog extends Model
     {
         $this->attributes['common_log_date'] = Carbon::now()->timezone('Europe/Moscow');
     }
-
-
 }

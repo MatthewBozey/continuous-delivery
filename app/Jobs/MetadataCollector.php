@@ -2,19 +2,11 @@
 
 namespace App\Jobs;
 
-use App\Models\ProjectLog\CommonLog;
-use App\Models\ProjectLog\ProjectLog;
-use App\Models\ProjectLog\ProjectLogProblem;
-use App\Models\ProjectLog\ProjectLogStage;
-use App\Models\UpdatePackage;
-use App\Models\UpdateScript;
-use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\DB;
 
 class MetadataCollector implements ShouldQueue
 {
@@ -34,13 +26,7 @@ class MetadataCollector implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(): void
-    {
+    public function handle(): void {}
 
-    }
-
-    private function logCommon($projectLogId, $projectLogStageId, $message, $logLevel = 2)
-    {
-
-    }
+    private function logCommon($projectLogId, $projectLogStageId, $message, $logLevel = 2) {}
 }

@@ -46,6 +46,6 @@ class ApiErrorResponse extends \Symfony\Component\HttpFoundation\Response implem
             ];
         }
 
-        return response()->json($response, $this->code, (array)$this->headers->all());
+        return response()->json($response, $this->code, (array) $this->headers->all());
     }
 }

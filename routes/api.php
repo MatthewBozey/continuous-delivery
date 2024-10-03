@@ -54,7 +54,6 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], static function ($rout
 
 Route::middleware(['jwt.auth'])->resource('permission', PermissionController::class);
 
-
 Route::group(['middleware' => 'jwt.auth', 'prefix' => 'users'], static function ($router) {
     Route::get('/', [UserController::class, 'index']);
     Route::get('/{id}', [UserController::class, 'show'])->where('id', '[0-9]+');

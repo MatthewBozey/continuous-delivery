@@ -9,6 +9,7 @@ class KronTmController extends Controller
     protected $user;
 
     protected $password;
+
     protected $deployControlUrl;
 
     public function __construct()

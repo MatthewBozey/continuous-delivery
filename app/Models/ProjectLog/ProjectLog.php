@@ -48,9 +48,6 @@ class ProjectLog extends Model
         return [new PrivateChannel('ProjectLog')];
     }
 
-    /**
-     * @return Builder|ProjectLog
-     */
     public function prunable(): Builder|ProjectLog
     {
         return static::where(function (Builder $query) {
@@ -64,6 +61,4 @@ class ProjectLog extends Model
             });
         });
     }
-
-
 }

@@ -2,21 +2,11 @@
 
 namespace App\Jobs;
 
-use App\Helpers\DictionaryCollectorHelper;
-use App\Models\DictionaryCheckData;
-use App\Models\ProjectLog\CommonLog;
-use App\Models\ProjectLog\ProjectLog;
-use App\Models\ProjectLog\ProjectLogProblem;
-use App\Models\ProjectLog\ProjectLogStage;
-use App\Models\UpdatePackage;
-use App\Models\UpdateScript;
-use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\DB;
 
 class DictionaryCollector implements ShouldQueue
 {
@@ -44,8 +34,5 @@ class DictionaryCollector implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(): void
-    {
-
-    }
+    public function handle(): void {}
 }

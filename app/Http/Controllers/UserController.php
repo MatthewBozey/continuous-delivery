@@ -59,8 +59,8 @@ class UserController extends Controller
         $user = User::findOrFail($id);
 
         tap($user, function (User $u) use ($request) {
-            if (!$request->user('web')
-                    ->hasRole('super-admin') && collect($request->get('roles'))->contains('super-admin')) {
+            if (! $request->user('web')
+                ->hasRole('super-admin') && collect($request->get('roles'))->contains('super-admin')) {
                 throw new HttpResponseException(response()->json(['message' => 'Нельзя выдать роль Главного Администратора'],
                     400));
             }
@@ -70,9 +70,9 @@ class UserController extends Controller
             $u->fill($request->all());
         });
 
-
         $user->save();
         broadcast(new UserDataUpdatedEvent($user));
+
         return new ApiSuccessResponse($user);
     }
 
@@ -96,7 +96,7 @@ class UserController extends Controller
         $data = $request->validated();
         $user = User::findOrFail($data['user_id']);
         if ($request->hasFile('avatar')) {
-            $avatarsFolderPath = '/avatars/' . $data['user_id'];
+            $avatarsFolderPath = '/avatars/'.$data['user_id'];
 
             if ($user->avatar) {
                 Storage::delete($user->avatar);

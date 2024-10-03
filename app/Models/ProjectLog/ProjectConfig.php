@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $deleted_at
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|ProjectConfig newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ProjectConfig newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ProjectConfig query()
@@ -28,11 +29,11 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|ProjectConfig whereProjectConfigTypeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ProjectConfig whereProjectId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ProjectConfig whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class ProjectConfig extends Model
 {
-
     protected $table = 'dbo.project_config';
 
     protected $primaryKey = 'project_config_id';

@@ -2,21 +2,13 @@
 
 namespace App\Jobs;
 
-use App\Events\UpdatingProductionProjectLog;
 use App\Models\ProductionProjectLog;
-use App\Models\ProductionProjectLogScript;
-use App\Models\ProductionProjectLogScriptError;
-use App\Models\ProductionProjectLogServer;
-use App\Models\ProductionProjectLogServerError;
-use App\Models\UpdateScript;
-use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
-use InvalidArgumentException;
 
 class UpdateServerRefactor implements ShouldQueue
 {
@@ -46,8 +38,5 @@ class UpdateServerRefactor implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(): void
-    {
-
-    }
+    public function handle(): void {}
 }
